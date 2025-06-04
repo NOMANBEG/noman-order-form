@@ -1,176 +1,301 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Noman Order Form</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Noman Enterprises Accounting App</title>
   <style>
     body {
-      font-family: sans-serif;
-      padding: 20px;
-      background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      padding: 0;
     }
-    .container {
-      max-width: 500px;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    h2 {
+    header {
+      background: #007bff;
+      color: #fff;
+      padding: 1rem;
       text-align: center;
-      margin-bottom: 20px;
     }
-    input, textarea, select, button {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      background: #343a40;
+      padding: 0.5rem;
     }
-    button {
-      background-color: green;
+    nav button {
+      background: #6c757d;
       color: white;
-      font-weight: bold;
       border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
       cursor: pointer;
     }
-    button:hover {
-      background-color: darkgreen;
+    nav button.active {
+      background: #28a745;
     }
-    .item-group {
-      display: flex;
-      gap: 5px;
-      margin-bottom: 10px;
+    section {
+      display: none;
+      padding: 1rem;
     }
-    .item-group > * {
-      flex: 1;
+    section.active {
+      display: block;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    table, th, td {
+      border: 1px solid #dee2e6;
+    }
+    th, td {
+      padding: 0.5rem;
+      text-align: left;
+    }
+    input, select, button {
+      margin: 0.25rem 0;
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+    .form-group {
+      margin-bottom: 1rem;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>🛒 Noman Order Form</h2>
-    <form id="orderForm">
-      <label>👤 नाम:</label>
-      <input type="text" name="name" id="name" required />
+  <header>
+    <h1>Noman Enterprises Accounting App</h1>
+  </header>
 
-      <label>📞 मोबाइल नंबर:</label>
-      <input type="tel" name="phone" id="phone" required />
+  <nav>
+    <button onclick="showSection('purchase')">Purchase</button>
+    <button onclick="showSection('sale')">Sale</button>
+    <button onclick="showSection('payment')">Payment</button>
+    <button onclick="showSection('receipt')">Receipt</button>
+    <button onclick="showSection('ledger')">Ledger</button>
+  </nav>
 
-      <label>📍 पता:</label>
-      <textarea name="address" id="address" rows="2" required></textarea>
-
-      <div id="itemsContainer">
-        <label>🛍️ सामान:</label>
-        <div class="item-group">
-          <input list="itemList" name="item" class="item" placeholder="Item name" required />
-          <select class="unit">
-            <option value="">Unit</option>
-            <option>pcs</option>
-            <option>kg</option>
-            <option>gram</option>
-            <option>litre</option>
-            <option>ml</option>
-            <option>box</option>
-            <option>meter</option>
-            <option>feet</option>
-            <option>pack</option>
-          </select>
-          <input type="number" class="quantity" placeholder="Qty" required />
-        </div>
+  <section id="purchase">
+    <h2>Purchase Form</h2>
+    <form id="purchaseForm">
+      <div class="form-group">
+        <label>Party Name:</label>
+        <input type="text" id="purchaseParty" required>
       </div>
-      <datalist id="itemList"></datalist>
-      <button type="button" onclick="addItem()">+ Add Item</button>
-
-      <button type="submit">Order Submit करें</button>
+      <div class="form-group">
+        <label>Item:</label>
+        <input type="text" id="purchaseItem" required>
+      </div>
+      <div class="form-group">
+        <label>Quantity:</label>
+        <input type="number" id="purchaseQty" required>
+      </div>
+      <div class="form-group">
+        <label>Rate:</label>
+        <input type="number" id="purchaseRate" required>
+      </div>
+      <div class="form-group">
+        <label>Date:</label>
+        <input type="date" id="purchaseDate" required>
+      </div>
+      <button type="submit">Submit</button>
     </form>
-    <p id="msg" style="color:green; text-align:center;"></p>
-  </div>
+    <table id="purchaseTable">
+      <thead>
+        <tr><th>Party</th><th>Item</th><th>Qty</th><th>Rate</th><th>Date</th><th>Action</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section id="sale">
+    <h2>Sale Form</h2>
+    <form id="saleForm">
+      <div class="form-group">
+        <label>Party Name:</label>
+        <input type="text" id="saleParty" required>
+      </div>
+      <div class="form-group">
+        <label>Item:</label>
+        <input type="text" id="saleItem" required>
+      </div>
+      <div class="form-group">
+        <label>Quantity:</label>
+        <input type="number" id="saleQty" required>
+      </div>
+      <div class="form-group">
+        <label>Rate:</label>
+        <input type="number" id="saleRate" required>
+      </div>
+      <div class="form-group">
+        <label>Date:</label>
+        <input type="date" id="saleDate" required>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+    <table id="saleTable">
+      <thead>
+        <tr><th>Party</th><th>Item</th><th>Qty</th><th>Rate</th><th>Date</th><th>Action</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section id="payment">
+    <h2>Payment Form</h2>
+    <form id="paymentForm">
+      <div class="form-group">
+        <label>Party Name:</label>
+        <input type="text" id="paymentParty" required>
+      </div>
+      <div class="form-group">
+        <label>Amount:</label>
+        <input type="number" id="paymentAmount" required>
+      </div>
+      <div class="form-group">
+        <label>Date:</label>
+        <input type="date" id="paymentDate" required>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+    <table id="paymentTable">
+      <thead>
+        <tr><th>Party</th><th>Amount</th><th>Date</th><th>Action</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section id="receipt">
+    <h2>Receipt Form</h2>
+    <form id="receiptForm">
+      <div class="form-group">
+        <label>Party Name:</label>
+        <input type="text" id="receiptParty" required>
+      </div>
+      <div class="form-group">
+        <label>Amount:</label>
+        <input type="number" id="receiptAmount" required>
+      </div>
+      <div class="form-group">
+        <label>Date:</label>
+        <input type="date" id="receiptDate" required>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+    <table id="receiptTable">
+      <thead>
+        <tr><th>Party</th><th>Amount</th><th>Date</th><th>Action</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section id="ledger">
+    <h2>Ledger</h2>
+    <p>Feature coming soon.</p>
+  </section>
 
   <script>
-    const form = document.getElementById('orderForm');
-    const msg = document.getElementById('msg');
-    const nameInput = document.getElementById('name');
-    const phoneInput = document.getElementById('phone');
-    const addressInput = document.getElementById('address');
-    const itemList = document.getElementById('itemList');
-    const itemsContainer = document.getElementById('itemsContainer');
-
-    window.onload = function() {
-      nameInput.value = localStorage.getItem('name') || '';
-      phoneInput.value = localStorage.getItem('phone') || '';
-      addressInput.value = localStorage.getItem('address') || '';
-      let items = JSON.parse(localStorage.getItem('items')) || [];
-      items.forEach(item => {
-        let option = document.createElement('option');
-        option.value = item;
-        itemList.appendChild(option);
-      });
-    };
-
-    nameInput.oninput = () => localStorage.setItem('name', nameInput.value);
-    phoneInput.oninput = () => localStorage.setItem('phone', phoneInput.value);
-    addressInput.oninput = () => localStorage.setItem('address', addressInput.value);
-
-    function addItem() {
-      const group = document.createElement('div');
-      group.className = 'item-group';
-      group.innerHTML = `
-        <input list="itemList" name="item" class="item" placeholder="Item name" required />
-        <select class="unit">
-          <option value="">Unit</option>
-          <option>pcs</option>
-          <option>kg</option>
-          <option>gram</option>
-          <option>litre</option>
-          <option>ml</option>
-          <option>box</option>
-          <option>meter</option>
-          <option>feet</option>
-          <option>pack</option>
-        </select>
-        <input type="number" class="quantity" placeholder="Qty" required />
-      `;
-      itemsContainer.appendChild(group);
+    function showSection(sectionId) {
+      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(sectionId).classList.add('active');
+      event.target.classList.add('active');
     }
 
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
+    function handleForm(formId, tableId, storageKey, isPayment = false) {
+      const form = document.getElementById(formId);
+      const tableBody = document.querySelector(`#${tableId} tbody`);
 
-      const name = nameInput.value;
-      const phone = phoneInput.value;
-      const address = addressInput.value;
-
-      let orderLines = [];
-      const itemInputs = document.querySelectorAll('.item-group');
-      itemInputs.forEach(group => {
-        const item = group.querySelector('.item').value.trim();
-        const unit = group.querySelector('.unit').value;
-        const quantity = group.querySelector('.quantity').value;
-        if (item) {
-          orderLines.push(`🛍️ ${item} - ${quantity} ${unit}`);
-          let items = JSON.parse(localStorage.getItem('items')) || [];
-          if (!items.includes(item)) {
-            items.push(item);
-            localStorage.setItem('items', JSON.stringify(items));
-            let option = document.createElement('option');
-            option.value = item;
-            itemList.appendChild(option);
+      function loadData() {
+        tableBody.innerHTML = "";
+        const data = JSON.parse(localStorage.getItem(storageKey) || "[]");
+        data.forEach((row, index) => {
+          const tr = document.createElement("tr");
+          if (isPayment) {
+            tr.innerHTML = `
+              <td>${row.party}</td>
+              <td>${row.amount}</td>
+              <td>${row.date}</td>
+              <td><button onclick="deleteData('${storageKey}', ${index}, '${tableId}', ${isPayment})">Delete</button></td>
+            `;
+          } else {
+            tr.innerHTML = `
+              <td>${row.party}</td>
+              <td>${row.item}</td>
+              <td>${row.qty}</td>
+              <td>${row.rate}</td>
+              <td>${row.date}</td>
+              <td><button onclick="deleteData('${storageKey}', ${index}, '${tableId}', ${isPayment})">Delete</button></td>
+            `;
           }
+          tableBody.appendChild(tr);
+        });
+      }
+
+      form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        let newData;
+        if (isPayment) {
+          const party = form.querySelector(`#${formId.replace('Form', '')}Party`).value;
+          const amount = form.querySelector(`#${formId.replace('Form', '')}Amount`).value;
+          const date = form.querySelector(`#${formId.replace('Form', '')}Date`).value;
+          newData = { party, amount, date };
+        } else {
+          const prefix = formId.replace("Form", "");
+          const party = document.getElementById(prefix + "Party").value;
+          const item = document.getElementById(prefix + "Item").value;
+          const qty = document.getElementById(prefix + "Qty").value;
+          const rate = document.getElementById(prefix + "Rate").value;
+          const date = document.getElementById(prefix + "Date").value;
+          newData = { party, item, qty, rate, date };
         }
+        const data = JSON.parse(localStorage.getItem(storageKey) || "[]");
+        data.push(newData);
+        localStorage.setItem(storageKey, JSON.stringify(data));
+        form.reset();
+        loadData();
       });
 
-      const message = `*New Order Received*\n\n👤 Name: ${name}\n📞 Phone: ${phone}\n📍 Address: ${address}\n\n${orderLines.join('\n')}`;
-      const whatsappLink = `https://wa.me/917505839234?text=${encodeURIComponent(message)}`;
-      window.open(whatsappLink, '_blank');
+      loadData();
+    }
 
-      msg.innerText = "✅ Order WhatsApp पर भेजा जा रहा है...";
-      form.reset();
-      itemsContainer.innerHTML = itemsContainer.children[0].outerHTML;
+    function deleteData(storageKey, index, tableId, isPayment = false) {
+      const data = JSON.parse(localStorage.getItem(storageKey) || "[]");
+      data.splice(index, 1);
+      localStorage.setItem(storageKey, JSON.stringify(data));
+      document.querySelector(`#${tableId} tbody`).innerHTML = "";
+      data.forEach((row, i) => {
+        const tr = document.createElement("tr");
+        if (isPayment) {
+          tr.innerHTML = `
+            <td>${row.party}</td>
+            <td>${row.amount}</td>
+            <td>${row.date}</td>
+            <td><button onclick="deleteData('${storageKey}', ${i}, '${tableId}', ${isPayment})">Delete</button></td>
+          `;
+        } else {
+          tr.innerHTML = `
+            <td>${row.party}</td>
+            <td>${row.item}</td>
+            <td>${row.qty}</td>
+            <td>${row.rate}</td>
+            <td>${row.date}</td>
+            <td><button onclick="deleteData('${storageKey}', ${i}, '${tableId}', ${isPayment})">Delete</button></td>
+          `;
+        }
+        document.querySelector(`#${tableId} tbody`).appendChild(tr);
+      });
+    }
+
+    window.addEventListener("load", function() {
+      handleForm("purchaseForm", "purchaseTable", "purchaseData");
+      handleForm("saleForm", "saleTable", "saleData");
+      handleForm("paymentForm", "paymentTable", "paymentData", true);
+      handleForm("receiptForm", "receiptTable", "receiptData", true);
     });
   </script>
 </body>
