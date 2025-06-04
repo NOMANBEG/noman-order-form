@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Noman Order Form</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input, textarea, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: green;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: darkgreen;
+    }
+    .item-group {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+    .item-group > * {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🛒 Noman Order Form</h2>
+    <form id="orderForm">
+      <label>👤 नाम:</label>
+      <input type="text" name="name" id="name" required />
+
+      <label>📞 मोबाइल नंबर:</label>
+      <input type="tel" name="phone" id="phone" required />
+
+      <label>📍 पता:</label>
+      <textarea name="address" id="address" rows="2" required></textarea>
+
+      <div id="itemsContainer">
+        <label>🛍️ सामान:</label>
+        <div class="item-group">
+          <input list="itemList" name="item" class="item" placeholder="Item name" required />
+          <select class="unit">
+            <option value="">Unit</option>
+            <option>pcs</option>
+            <option>kg</option>
+            <option>gram</option>
+            <option>litre</option>
+            <option>ml</option>
+            <option>box</option>
+            <option>meter</option>
+            <option>feet</option>
+            <option>pack</option>
+          </select>
+          <input type="number" class="quantity" placeholder="Qty" required />
+        </div>
+      </div>
+      <datalist id="itemList"></datalist>
+      <button type="button" onclick="addItem()">+ Add Item</button>
+
+      <button type="submit">Order Submit करें</button>
+    </form>
+    <p id="msg" style="color:green; text-align:center;"></p>
+  </div>
+
+  <script>
+    const form = document.getElementById('orderForm');
+    const msg = document.getElementById('msg');
+    const nameInput = document.getElementById('name');
+    const phoneInput = document.getElementById('phone');
+    const addressInput = document.getElementById('address');
+    const itemList = document.getElementById('itemList');
+    const itemsContainer = document.getElementById('itemsContainer');
+
+    window.onload = function() {
+      nameInput.value = localStorage.getItem('name') || '';
+      phoneInput.value = localStorage.getItem('phone') || '';
+      addressInput.value = localStorage.getItem('address') || '';
+      let items = JSON.parse(localStorage.getItem('items')) || [];
+      items.forEach(item => {
+        let option = document.createElement('option');
+        option.value = item;
+        itemList.appendChild(option);
+      });
+    };
+
+    nameInput.oninput = () => localStorage.setItem('name', nameInput.value);
+    phoneInput.oninput = () => localStorage.setItem('phone', phoneInput.value);
+    addressInput.oninput = () => localStorage.setItem('address', addressInput.value);
+
+    function addItem() {
+      const group = document.createElement('div');
+      group.className = 'item-group';
+      group.innerHTML = `
+        <input list="itemList" name="item" class="item" placeholder="Item name" required />
+        <select class="unit">
+          <option value="">Unit</option>
+          <option>pcs</option>
+          <option>kg</option>
+          <option>gram</option>
+          <option>litre</option>
+          <option>ml</option>
+          <option>box</option>
+          <option>meter</option>
+          <option>feet</option>
+          <option>pack</option>
+        </select>
+        <input type="number" class="quantity" placeholder="Qty" required />
+      `;
+      itemsContainer.appendChild(group);
+    }
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name = nameInput.value;
+      const phone = phoneInput.value;
+      const address = addressInput.value;
+
+      let orderLines = [];
+      const itemInputs = document.querySelectorAll('.item-group');
+      itemInputs.forEach(group => {
+        const item = group.querySelector('.item').value.trim();
+        const unit = group.querySelector('.unit').value;
+        const quantity = group.querySelector('.quantity').value;
+        if (item) {
+          orderLines.push(`🛍️ ${item} - ${quantity} ${unit}`);
+          let items = JSON.parse(localStorage.getItem('items')) || [];
+          if (!items.includes(item)) {
+            items.push(item);
+            localStorage.setItem('items', JSON.stringify(items));
+            let option = document.createElement('option');
+            option.value = item;
+            itemList.appendChild(option);
+          }
+        }
+      });
+
+      const message = `*New Order Received*\n\n👤 Name: ${name}\n📞 Phone: ${phone}\n📍 Address: ${address}\n\n${orderLines.join('\n')}`;
+      const whatsappLink = `https://wa.me/917505839234?text=${encodeURIComponent(message)}`;
+      window.open(whatsappLink, '_blank');
+
+      msg.innerText = "✅ Order WhatsApp पर भेजा जा रहा है...";
+      form.reset();
+      itemsContainer.innerHTML = itemsContainer.children[0].outerHTML;
+    });
+  </script>
+</body>
+</html>
